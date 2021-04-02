@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "./src",
+    "allowJs": true,
+    "target": "esnext", //esnext
+    "watch": true,
+    "esModuleInterop": true,
+  },
+  "include": ["./ts_src/**/*"]
+}
