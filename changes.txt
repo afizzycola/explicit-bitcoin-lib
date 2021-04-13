@@ -1,0 +1,13 @@
+Updated readme to .md
+Added Seed and Contact classes
+
+
+Alice AND BOB
+ALICE AND CHARLIE
+
+
+full: AND(<Alice>, OR(<Bob>, <Charlie>)),
+fragments: [
+    AND(<Alice>,<Bob>),
+    AND(<Alice>,<Charlie>)
+]

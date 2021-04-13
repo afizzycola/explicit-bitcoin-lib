@@ -1,5 +1,4 @@
 import { HexBase64Latin1Encoding } from "crypto";
-import { PaymentEndpoint } from "./payment_endpoint";
 import {BitcoinNValues, BitcoinTimeUnits, TimeInputTypes, toPaddedHex } from "./_utility";
 const bitcoin = require('bitcoinjs-lib');
 

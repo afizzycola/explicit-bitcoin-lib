@@ -1,4 +1,4 @@
-import { BitcoinTimeUnits, toPaddedHex } from "./_utility";
+import { BitcoinTimeUnits } from "./_utility";
 const bip68 = require('bip68');
 const bitcoin = require('bitcoinjs-lib');
 export class RelativeTime {
@@ -18,8 +18,6 @@ export class RelativeTime {
                 conversion = fromScriptEncoding(inputValue);
                 break;
         }
-        //this.nSequence = conversion.nSequence;
-        //this.nSequence maybe one day
         this.scriptEncoding = conversion.csvScript;
         this.timeUnit = conversion.type;
         if (conversion.type === BitcoinTimeUnits.seconds) {
@@ -28,17 +26,20 @@ export class RelativeTime {
         else if (conversion.type === BitcoinTimeUnits.blocks) {
             this.blocks = conversion.blocks;
         }
-        this.requiredNValues = {
-            nVersionMinimum: 2,
-            nSequence: {
-                dec: conversion.nSequence,
-                hex: toPaddedHex(conversion.nSequence),
-            },
-            nLockTime: {
-                dec: 0,
-                hex: toPaddedHex(0),
-            },
-        };
+        this.nSequence = conversion.nSequence;
+        // to do - be replaced with:
+        // this.requiredNValues = {
+        //     nVersionMinimum: 2,
+        //     nSequence: {
+        //         dec: conversion.nSequence,
+        //         hex: toPaddedHex(conversion.nSequence),
+        //     },
+        //     nLockTime: {
+        //         dec: 0,
+        //         hex: toPaddedHex(0),
+        //     },
+        // }
+        ///////////////////////////////////
     }
 }
 function toSequenceTime(valueInSeconds) {

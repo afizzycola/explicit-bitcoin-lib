@@ -8,16 +8,16 @@ export class PaymentEndpoint {
         //this.network
         this.miniscript; //to do
         this.asm = asmScript.trim().replace(/\s+/g, ' ');
-        this.buffer = bitcoin.script.fromASM(this.asm);
-        this.hexEncoding = this.buffer.toString('hex');
+        const buffer = bitcoin.script.fromASM(this.asm);
+        this.hexEncoding = buffer.toString('hex');
         this.stack = this.asm.split(" ");
         const p2shObject = bitcoin.payments.p2sh({
-            redeem: { output: this.buffer, network: network },
+            redeem: { output: buffer, network: network },
             network: network,
         });
         const p2wsh_v0Object = bitcoin.payments.p2wsh({
-            script: this.buffer,
-            redeem: { output: this.buffer, network: network },
+            script: buffer,
+            redeem: { output: buffer, network: network },
             network: network,
         });
         const p2sh_p2wshObject = bitcoin.payments.p2sh({
@@ -39,11 +39,12 @@ export class PaymentEndpoint {
             scriptHash: p2wsh_v0Object.hash.toString('hex'),
             scriptPubKeyHex: p2wsh_v0Object.output.toString('hex'),
         };
-        this.getTimeValuesFromStack();
+        //this.getTimeValuesFromStack(); commented out until nValue work on Time classes complete
     }
     getTimeValuesFromStack() {
         let CSVCount;
         let CLTVCount;
+        // First, populate this.nValuesSuperset
         for (let i = 0; i < this.stack.length; i++) {
             if (this.stack[i].includes("OP_CHECKSEQUENCEVERIFY")) {
                 CSVCount += 1;
@@ -54,5 +55,8 @@ export class PaymentEndpoint {
                 this.nValuesSuperset.push(new AbsoluteTime(this.stack[i - 1], "SCRIPT_ENCODING").requiredNValues);
             }
         }
+        //Second, analyse this.nValuesSuperset
+    }
+    getOverallNValues() {
     }
 }

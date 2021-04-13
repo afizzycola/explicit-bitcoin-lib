@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./src",
     "allowJs": true,
-    "target": "esnext", //esnext
+    "target": "es2018", //esnext
     "watch": true,
     "esModuleInterop": true,
   },
