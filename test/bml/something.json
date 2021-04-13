@@ -1,0 +1,279 @@
+{
+    "paths": [
+        "and(Activity_10ttrdj,Activity_0nyqi0b,Activity_19uoo8l)"
+    ],
+    "elements": [
+        {
+            "incoming": [],
+            "outgoing": [
+                "Flow_1aezxv4"
+            ],
+            "id": "StartEvent_1",
+            "shapeDefinitions": {
+                "x": 52,
+                "y": 542,
+                "w": 36,
+                "h": 36
+            },
+            "detail": {},
+            "type": "bml:Start"
+        },
+        {
+            "incoming": [
+                "Flow_1aezxv4"
+            ],
+            "outgoing": [
+                "Flow_1srru2s",
+                "Flow_08qjvk7",
+                "Flow_1y89mhn"
+            ],
+            "id": "Gateway_02rgzux",
+            "shapeDefinitions": {
+                "x": 145,
+                "y": 535,
+                "w": 50,
+                "h": 50
+            },
+            "detail": {},
+            "type": "bml:AndGateway"
+        },
+        {
+            "incoming": [
+                "StartEvent_1"
+            ],
+            "outgoing": [
+                "Gateway_02rgzux"
+            ],
+            "id": "Flow_1aezxv4",
+            "source": "StartEvent_1",
+            "target": "Gateway_02rgzux",
+            "edgeDefinitions": [
+                {
+                    "$type": "dc:Point",
+                    "x": 88,
+                    "y": 560
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 145,
+                    "y": 560
+                }
+            ],
+            "detail": {},
+            "type": "bml:SequenceFlow"
+        },
+        {
+            "incoming": [
+                "Flow_1srru2s"
+            ],
+            "outgoing": [
+                "Flow_1w1iauk"
+            ],
+            "id": "Activity_10ttrdj",
+            "shapeDefinitions": {
+                "x": 260,
+                "y": 520,
+                "w": 80,
+                "h": 100
+            },
+            "label": "Alice",
+            "detail": {},
+            "type": "bml:PublicKey"
+        },
+        {
+            "incoming": [
+                "Gateway_02rgzux"
+            ],
+            "outgoing": [
+                "Activity_10ttrdj"
+            ],
+            "id": "Flow_1srru2s",
+            "source": "Gateway_02rgzux",
+            "target": "Activity_10ttrdj",
+            "edgeDefinitions": [
+                {
+                    "$type": "dc:Point",
+                    "x": 195,
+                    "y": 560
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 260,
+                    "y": 560
+                }
+            ],
+            "detail": {},
+            "type": "bml:SequenceFlow"
+        },
+        {
+            "incoming": [
+                "Flow_08qjvk7"
+            ],
+            "outgoing": [
+                "Flow_1ww6lb8"
+            ],
+            "id": "Activity_0nyqi0b",
+            "shapeDefinitions": {
+                "x": 260,
+                "y": 650,
+                "w": 80,
+                "h": 100
+            },
+            "label": "Bob",
+            "detail": {},
+            "type": "bml:PublicKey"
+        },
+        {
+            "incoming": [
+                "Gateway_02rgzux"
+            ],
+            "outgoing": [
+                "Activity_0nyqi0b"
+            ],
+            "id": "Flow_08qjvk7",
+            "source": "Gateway_02rgzux",
+            "target": "Activity_0nyqi0b",
+            "edgeDefinitions": [
+                {
+                    "$type": "dc:Point",
+                    "x": 170,
+                    "y": 585
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 170,
+                    "y": 690
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 260,
+                    "y": 690
+                }
+            ],
+            "detail": {},
+            "type": "bml:SequenceFlow"
+        },
+        {
+            "incoming": [
+                "Flow_1w1iauk",
+                "Flow_1ww6lb8"
+            ],
+            "outgoing": [],
+            "id": "Event_11mwpx5",
+            "shapeDefinitions": {
+                "x": 482,
+                "y": 542,
+                "w": 36,
+                "h": 36
+            },
+            "detail": {},
+            "type": "bml:End"
+        },
+        {
+            "incoming": [
+                "Activity_10ttrdj"
+            ],
+            "outgoing": [
+                "Event_11mwpx5"
+            ],
+            "id": "Flow_1w1iauk",
+            "source": "Activity_10ttrdj",
+            "target": "Event_11mwpx5",
+            "edgeDefinitions": [
+                {
+                    "$type": "dc:Point",
+                    "x": 360,
+                    "y": 560
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 482,
+                    "y": 560
+                }
+            ],
+            "detail": {},
+            "type": "bml:SequenceFlow"
+        },
+        {
+            "incoming": [
+                "Activity_0nyqi0b"
+            ],
+            "outgoing": [
+                "Event_11mwpx5"
+            ],
+            "id": "Flow_1ww6lb8",
+            "source": "Activity_0nyqi0b",
+            "target": "Event_11mwpx5",
+            "edgeDefinitions": [
+                {
+                    "$type": "dc:Point",
+                    "x": 360,
+                    "y": 690
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 396,
+                    "y": 690
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 396,
+                    "y": 560
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 482,
+                    "y": 560
+                }
+            ],
+            "detail": {},
+            "type": "bml:SequenceFlow"
+        },
+        {
+            "incoming": [
+                "Flow_1y89mhn"
+            ],
+            "outgoing": [],
+            "id": "Activity_19uoo8l",
+            "shapeDefinitions": {
+                "x": 260,
+                "y": 770,
+                "w": 80,
+                "h": 100
+            },
+            "label": "Charlie",
+            "detail": {},
+            "type": "bml:PublicKey"
+        },
+        {
+            "incoming": [
+                "Gateway_02rgzux"
+            ],
+            "outgoing": [
+                "Activity_19uoo8l"
+            ],
+            "id": "Flow_1y89mhn",
+            "source": "Gateway_02rgzux",
+            "target": "Activity_19uoo8l",
+            "edgeDefinitions": [
+                {
+                    "$type": "dc:Point",
+                    "x": 170,
+                    "y": 585
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 170,
+                    "y": 810
+                },
+                {
+                    "$type": "dc:Point",
+                    "x": 260,
+                    "y": 810
+                }
+            ],
+            "detail": {},
+            "type": "bml:SequenceFlow"
+        }
+    ]
+}
