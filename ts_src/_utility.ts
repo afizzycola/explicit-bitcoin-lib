@@ -1,3 +1,6 @@
+import { HexBase64Latin1Encoding } from "crypto";
+const TaggedHash = require('../tmp_modules/tagged-hash');
+
 export interface NParameter {
     hex: string;
     dec: number;
@@ -21,3 +24,8 @@ export function toPaddedHex (decToPad): string {
     return halfPaddedHex.toString(16).padStart(10,"0x");
 }
 
+export function createTaggedHash(tag: string, message: string): string {
+    const buffer = Buffer.from(message, 'hex');
+    const  taggedHash = new TaggedHash(tag);
+    return taggedHash.hash(buffer).toString('hex');
+}

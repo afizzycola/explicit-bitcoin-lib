@@ -1,6 +1,7 @@
 import { AbsoluteTime } from "../ts_src/absolute_time";
 import { RelativeTime } from "../ts_src/relative_time";
 import { PaymentEndpoint } from "../ts_src/payment_endpoint";
+import {createTaggedHash} from "../ts_src/_utility";
 const bitcoin = require('bitcoinjs-lib');
 const TESTNET = bitcoin.networks.testnet;
 
@@ -11,6 +12,14 @@ const privKeyString3 = 'cTF6whX245WYGrafHBw6Sc4vYZ9eF6byLQQm9kcFEQg24AgJxF88';
 const keyPair = bitcoin.ECPair.fromWIF(privKeyString, TESTNET);
 const keyPair2 = bitcoin.ECPair.fromWIF(privKeyString2, TESTNET );
 const keyPair3 = bitcoin.ECPair.fromWIF(privKeyString3, TESTNET );
+
+function createTapLeafHash(scriptHex: string, leafVersion:string = 'c0'): string { 
+  //leaf version might be int in future and mapped to hex
+  const buffer = Buffer.from(scriptHex, 'hex');
+  const compactSizePrefix = buffer.length.toString(16);
+  const message = leafVersion + compactSizePrefix + scriptHex;
+  return createTaggedHash('TapLeaf', message)
+}
 
 /// Test 1
 
@@ -45,7 +54,8 @@ const simpleANDOutput = {
       address: 'tb1q280rxr76fjtp0kuhslryvfajax5fycwcj7dcnemm8hdkawukr84qhtn0s2',
       scriptHash: '51de330fda4c9617db9787c64627b2e9a89261d8979b89e77b3ddb6ebb9619ea',
       scriptPubKeyHex: '002051de330fda4c9617db9787c64627b2e9a89261d8979b89e77b3ddb6ebb9619ea'
-    }
+    },
+    tapLeaf: "8567eb7d28b94c0d0f0ca6dcd37d324f543d3758aadc9fe8d56198ee3b03df8a"
 }
 
 test('1. AND(<bob>, <alice>)', () => {
@@ -89,7 +99,8 @@ const simpleOrOutput = {
       address: 'tb1qkqnsqmzruvmvajkulpmqur77urgvwxfjalxrxm54rnmn59jdrq6srl0sre',
       scriptHash: 'b027006c43e336cecadcf8760e0fdee0d0c71932efcc336e951cf73a164d1835',
       scriptPubKeyHex: '0020b027006c43e336cecadcf8760e0fdee0d0c71932efcc336e951cf73a164d1835'
-    }
+    },
+    tapLeaf: "92996256c5b29d6f1ef174032ca274c97e572bc1c6c643f735b0e02067fb8f8a"
 }
 
 
@@ -129,7 +140,8 @@ const simpleRelativeBlockHeightOutput = {
     address: 'tb1qz66t44knjjqgh9uv0p5axw6dd5rvykz96nd0s2el5p30ngw7x5ds7uh4dl',
     scriptHash: '16b4bad6d394808b978c7869d33b4d6d06c25845d4daf82b3fa062f9a1de351b',
     scriptPubKeyHex: '002016b4bad6d394808b978c7869d33b4d6d06c25845d4daf82b3fa062f9a1de351b'
-  }
+  },
+  tapLeaf: "1c2578e2adf6fa101aecfd72c03bd615ffd30a8c88a4889e25f043abd30f0839"
 }
 
 test('3. AND(<alice>, OLDER(<169 blocks> ) )', () => {
@@ -168,7 +180,8 @@ const simpleAbsoluteTimeLockOutput = {
     address: 'tb1qqvh2ecd6zp9y3v58msndlste64mku2zy2mvpxyhr4e2v0k64kyzqh5ghpj',
     scriptHash: '032eace1ba104a48b287dc26dfc179d5776e284456d81312e3ae54c7db55b104',
     scriptPubKeyHex: '0020032eace1ba104a48b287dc26dfc179d5776e284456d81312e3ae54c7db55b104'
-  }
+  },
+  tapLeaf: "bd6b248827c972be0cceb00a417f84c45de57882b7ac39b12d7401bf13a011a2"
 }
 
 test('4. AND(<alice>, AFTER(<2020-03-18T10:00>) )', () => {
@@ -219,7 +232,8 @@ const AndOrRelBlockheightOutput =  {
     address: 'tb1qc6gpm568xglhd4qg80g79d7ram68tt0z9xzhkrq5rc26570qz8vsn3wjjv',
     scriptHash: 'c6901dd347323f76d4083bd1e2b7c3eef475ade229857b0c141e15aa79e011d9',
     scriptPubKeyHex: '0020c6901dd347323f76d4083bd1e2b7c3eef475ade229857b0c141e15aa79e011d9'
-  }
+  },
+  tapLeaf: "f39763586bfa2fcf836425d4297a96bd08c3759a30a87bf3403d213ef1fedb93"  
 }
 
 test('5.  and(pk(<Alice>),or(pk(<Bob>),older(<169 blocks>)))', () => {

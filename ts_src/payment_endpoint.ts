@@ -1,5 +1,5 @@
 import { HexBase64Latin1Encoding } from "crypto";
-import { BitcoinNValues } from "./_utility";
+import { BitcoinNValues, createTaggedHash } from "./_utility";
 import { RelativeTime } from './relative_time';
 import { AbsoluteTime } from "./absolute_time";
 
@@ -7,23 +7,24 @@ const bitcoin = require('bitcoinjs-lib');
 const TESTNET = bitcoin.networks.testnet;
 
 
-interface ScriptAddressDetail {
+export interface ScriptAddressDetail {
     address: string;
-    scriptHash: HexBase64Latin1Encoding;
-    scriptPubKeyHex: HexBase64Latin1Encoding;
+    scriptHash: string;
+    scriptPubKeyHex: string;
 }
 
 export class PaymentEndpoint {
 
     miniscript: string;
     asm: string;
+    tapLeaf: string;
     //buffer: Buffer;
     hexEncoding: string;
     stack: Array<string>;
     p2sh: ScriptAddressDetail;
     p2sh_p2wsh: ScriptAddressDetail;
     p2wsh_v0: ScriptAddressDetail;
-    //p2wsh_v1: ScriptAddressDetail; to do
+    p2wsh_v1: any;// ScriptAddressDetail; //to do
     requiredNValues: BitcoinNValues;
     nValuesSuperset: Array<any> = []; //to change type in <>
 
@@ -36,7 +37,6 @@ export class PaymentEndpoint {
 
         this.hexEncoding = buffer.toString('hex');
         this.stack = this.asm.split(" ");
-        
         const p2shObject = bitcoin.payments.p2sh({
             redeem: { output: buffer, network: network },
             network: network,
@@ -67,6 +67,8 @@ export class PaymentEndpoint {
             scriptPubKeyHex: p2wsh_v0Object.output.toString('hex'),
         }
 
+        this.tapLeaf = this.createTapLeafHash(this.hexEncoding);
+
         //this.getTimeValuesFromStack(); commented out until nValue work on Time classes complete
 
     }
@@ -95,5 +97,13 @@ export class PaymentEndpoint {
     private getOverallNValues():void {
         
     }
-    
+
+    private createTapLeafHash(scriptHex: string, leafVersion:string = 'c0'): string { 
+        //leaf version might be int in future and mapped to hex
+        const buffer = Buffer.from(scriptHex, 'hex');
+        const compactSizePrefix = buffer.length.toString(16);
+        const message = leafVersion + compactSizePrefix + scriptHex;
+        return createTaggedHash('TapLeaf', message)
+    }
+
 }
