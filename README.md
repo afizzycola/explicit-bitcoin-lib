@@ -1,4 +1,4 @@
-# ExplicitBitcoin (ExpliciBit) Library 
+# The Bitcoin Explicit (BitcoinEx) Library 
 
 A Bitcoin library written in Typescript and which provides explicit classes for use in Bitcoin development and testing.
 
