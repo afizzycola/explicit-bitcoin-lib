@@ -1,5 +1,5 @@
 import {PaymentEndpoint, ScriptAddressDetail} from './payment_endpoint';
-import {SerialTransaction} from "./serialised_bitcoin_tx";
+import {SerializedTransaction} from "./serialized_tx";
 import {TaprootSighash} from "./taproot_sighash";
 import {createTaggedHash} from "./_utility";
 const segwit_addr = require('../tmp_bech32m/segwit_addr');
