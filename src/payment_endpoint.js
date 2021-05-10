@@ -12,7 +12,6 @@ export class PaymentEndpoint {
         const buffer = bitcoin.script.fromASM(this.asm);
         this.hexEncoding = buffer.toString('hex');
         this.stack = this.asm.split(" ");
-        this.tapLeaf = createTapLeafHash(this.hexEncoding);
         const p2shObject = bitcoin.payments.p2sh({
             redeem: { output: buffer, network: network },
             network: network,
@@ -41,7 +40,7 @@ export class PaymentEndpoint {
             scriptHash: p2wsh_v0Object.hash.toString('hex'),
             scriptPubKeyHex: p2wsh_v0Object.output.toString('hex'),
         };
-        this.p2wsh_v1 = {};
+        this.tapLeaf = this.createTapLeafHash(this.hexEncoding);
         //this.getTimeValuesFromStack(); commented out until nValue work on Time classes complete
     }
     getTimeValuesFromStack() {
@@ -62,11 +61,11 @@ export class PaymentEndpoint {
     }
     getOverallNValues() {
     }
-}
-function createTapLeafHash(scriptHex, leafVersion = 'c0') {
-    //leaf version might be int in future and mapped to hex
-    const buffer = Buffer.from(scriptHex, 'hex');
-    const compactSizePrefix = buffer.length.toString(16);
-    const message = leafVersion + compactSizePrefix + scriptHex;
-    return createTaggedHash('TapLeaf', message);
+    createTapLeafHash(scriptHex, leafVersion = 'c0') {
+        //leaf version might be int in future and mapped to hex
+        const buffer = Buffer.from(scriptHex, 'hex');
+        const compactSizePrefix = buffer.length.toString(16);
+        const message = leafVersion + compactSizePrefix + scriptHex;
+        return createTaggedHash('TapLeaf', message);
+    }
 }

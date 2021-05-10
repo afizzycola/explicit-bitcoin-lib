@@ -1,4 +1,3 @@
-import { HexBase64Latin1Encoding } from "crypto";
 const TaggedHash = require('../tmp_modules/tagged-hash');
 
 export interface NParameter {

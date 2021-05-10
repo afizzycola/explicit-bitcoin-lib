@@ -2,7 +2,7 @@ import {PaymentEndpoint, ScriptAddressDetail} from './payment_endpoint';
 import {SerializedTransaction} from "./serialized_tx";
 import {TaprootSighash} from "./taproot_sighash";
 import {createTaggedHash} from "./_utility";
-const segwit_addr = require('../tmp_bech32m/segwit_addr');
+const segwit_addr = require('../tmp_modules/bech32m/segwit_addr');
 const secp256k1 = require('secp256k1');
 const bitcoin = require('bitcoinjs-lib');
 const TESTNET = bitcoin.networks.testnet;

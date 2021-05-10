@@ -72,7 +72,6 @@ export const test_data = {
         4edfcf9dfe6c0b5c83d1ab3f78d1b39a46ebac6798e08e19761f5ed89ec83c10 
         OP_CHECKSIG
     `,
-
     twoScriptResult1: {
     internalEndPoints: [
             internalEndPoint1,
