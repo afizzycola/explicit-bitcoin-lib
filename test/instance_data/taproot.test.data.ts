@@ -78,7 +78,11 @@ export const test_data = {
             internalEndPoint2
         ],
         internalPubkey: '5bf08d58a430f8c222bffaf9127249c5cdff70a2d68b2b45637eb662b6b88eb5',
-        tapBranch: '41646f8c1fe2a96ddad7f5471bc4fee7da98794ef8c45a4f4fc6a559d60c9f6b',
+        tapTree: [ 
+            '632c8632b4f29c6291416e23135cf78ecb82e525788ea5ed6483e3c6ce943b42',
+            'c81451874bd9ebd4b6fd4bba1f84cdfb533c532365d22a0a702205ff658b17c9',
+            '41646f8c1fe2a96ddad7f5471bc4fee7da98794ef8c45a4f4fc6a559d60c9f6b',
+        ],
         tapRoot: '41646f8c1fe2a96ddad7f5471bc4fee7da98794ef8c45a4f4fc6a559d60c9f6b',
         tapTweak: '0b0e6981ce6cac74d055d0e4c25e5b4455a083b3217761327867f26460e0a776',
         tapTweakedPubkey: {
@@ -98,7 +102,11 @@ export const test_data = {
             internalEndPoint1
         ],
         internalPubkey: '5bf08d58a430f8c222bffaf9127249c5cdff70a2d68b2b45637eb662b6b88eb5',
-        tapBranch: '41646f8c1fe2a96ddad7f5471bc4fee7da98794ef8c45a4f4fc6a559d60c9f6b',
+        tapTree: [ 
+            '632c8632b4f29c6291416e23135cf78ecb82e525788ea5ed6483e3c6ce943b42',
+            'c81451874bd9ebd4b6fd4bba1f84cdfb533c532365d22a0a702205ff658b17c9',
+            '41646f8c1fe2a96ddad7f5471bc4fee7da98794ef8c45a4f4fc6a559d60c9f6b',
+        ],
         tapRoot: '41646f8c1fe2a96ddad7f5471bc4fee7da98794ef8c45a4f4fc6a559d60c9f6b',
         tapTweak: '0b0e6981ce6cac74d055d0e4c25e5b4455a083b3217761327867f26460e0a776',
         tapTweakedPubkey: {

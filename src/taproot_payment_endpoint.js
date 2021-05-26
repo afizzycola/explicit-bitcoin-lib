@@ -1,10 +1,18 @@
 import { PaymentEndpoint } from './payment_endpoint';
+//import {SerializedTransaction} from "./serialized_tx";
+//import {TaprootSighash} from "../taproot_sighash";
 import { createTaggedHash } from "./_utility";
 const segwit_addr = require('../tmp_modules/bech32m/segwit_addr');
 const secp256k1 = require('secp256k1');
 const bitcoin = require('bitcoinjs-lib');
+const merkle = require('merkle-lib');
 const TESTNET = bitcoin.networks.testnet;
 const REGTEST = bitcoin.networks.regtest;
+//this function modifies the utility function of createTaggedHash
+//so as to work nicely as an input into the merkle-lib functions
+function tapMerkle(joinedData) {
+    return Buffer.from(createTaggedHash('TapBranch', joinedData), 'hex');
+}
 export class TaprootPaymentEndpoint {
     constructor(asmScript, internalPubkey, network = TESTNET) {
         //if provided just a string, we put that in an Array<string> for code reuse
@@ -16,38 +24,25 @@ export class TaprootPaymentEndpoint {
             this.internalEndPoints.push(new PaymentEndpoint(scriptElement, network));
         });
         this.internalPubkey = internalPubkey;
-        this.tapBranch;
+        this.tapTree;
         this.tapTweak;
         this.tapRoot;
-        this.createTapBranch();
-        this.createTapRoot();
+        //this.createTapBranch();
+        this.createTapTree();
         this.createTapTweak();
         this.createTweakedPubKey();
         this.createAddress();
     }
-    createTapBranch() {
+    createTapTree() {
         const tapLeafs = [];
         this.internalEndPoints.forEach((endPoint) => {
-            tapLeafs.push(endPoint.tapLeaf);
+            tapLeafs.push(Buffer.from(endPoint.tapLeaf, 'hex'));
         });
-        const tapLeafsArgsOrdered = tapLeafs.sort();
-        this.tapBranch = createTaggedHash('TapBranch', tapLeafsArgsOrdered.join(''));
-    }
-    createTapRoot() {
-        this.tapRoot = this.tapBranch; // for now
-        // possible code in future START
-        // const sortedLeafArray = leafArray.sort();
-        // let currentLength = sortedLeafArray.length;
-        // for (let i = 0; i < currentLength; i ++) {
-        //     if(currentLength == 1) {
-        //         return
-        //     }
-        //     if (currentLength > 1) {
-        //         const tapBranch = createTaggedHash('TapBranch', sortedLeafArray[0] + sortedLeafArray[1]);
-        //         sortedLeafArray.push(tapBranch);
-        //     }
-        // }
-        // possible code in future END
+        tapLeafs.sort();
+        const tapTree = merkle(tapLeafs, tapMerkle);
+        this.tapRoot = tapTree[tapTree.length - 1].toString('hex');
+        //because we want to persist the tree as Array<string>
+        this.tapTree = tapTree.map(element => element.toString('hex'));
     }
     createTapTweak() {
         this.tapTweak = createTaggedHash('TapTweak', this.internalPubkey + this.tapRoot);
@@ -102,23 +97,23 @@ export class TaprootPaymentEndpoint {
         return tweakedSeckeyBuffer.toString('hex');
     }
 }
-// const internalSecKey = "3bed2cb3a3acf7b6a8ef408420cc682d5520e26976d354254f528c965612054f";
-// const internalPubKey = "5bf08d58a430f8c222bffaf9127249c5cdff70a2d68b2b45637eb662b6b88eb5";
-// const script1 = `
-//     9000
-//     OP_CHECKSEQUENCEVERIFY
-//     OP_DROP
-//     9997a497d964fc1a62885b05a51166a65a90df00492c8d7cf61d6accf54803be
-//     OP_CHECKSIG
-// `
-// const script2 = `
-//     OP_SHA256 6c60f404f8167a38fc70eaf8aa17ac351023bef86bcb9d1086a19afe95bd5333 
-//     OP_EQUALVERIFY 
-//     4edfcf9dfe6c0b5c83d1ab3f78d1b39a46ebac6798e08e19761f5ed89ec83c10 
-//     OP_CHECKSIG
-// `
-// const dogeTest = new TaprootPaymentEndpoint([script1, script2], internalPubKey, REGTEST);
-// console.log(dogeTest);
+const internalSecKey = "3bed2cb3a3acf7b6a8ef408420cc682d5520e26976d354254f528c965612054f";
+const internalPubKey = "5bf08d58a430f8c222bffaf9127249c5cdff70a2d68b2b45637eb662b6b88eb5";
+const script1 = `
+    9000
+    OP_CHECKSEQUENCEVERIFY
+    OP_DROP
+    9997a497d964fc1a62885b05a51166a65a90df00492c8d7cf61d6accf54803be
+    OP_CHECKSIG
+`;
+const script2 = `
+    OP_SHA256 6c60f404f8167a38fc70eaf8aa17ac351023bef86bcb9d1086a19afe95bd5333 
+    OP_EQUALVERIFY 
+    4edfcf9dfe6c0b5c83d1ab3f78d1b39a46ebac6798e08e19761f5ed89ec83c10 
+    OP_CHECKSIG
+`;
+const dogeTest = new TaprootPaymentEndpoint([script1, script2], internalPubKey, REGTEST);
+console.log(dogeTest);
 // const txCommitId = "8db4c3838db0dfaff39e5d751f7f40f6c4aadaa9d7bcaab52fec399ce1906bb4";
 // const txCommitRaw = "020000000001011cfad14618f050786e26e97f3cab74630c10d2ab6c72f5a692b3ce5b0df3489d0000000000feffffff02a2b41c00000000001600146e3ae234c613b84ec670c475f03c86a73911a3028096980000000000225120f128a8a8a636e19f00a80169550fedfc26b6f5dd04d935ec452894aad938ef0c02473044022070e156425728caa647efe910594c21b4f414f2f4a0ae8e6cb8a9780b589312580220264d13a6bd68ec39d93aa9202fbf55d305481907f0a592b9eea94011fd91c43c012103d37005d5ec7540bcfa0986fca3ea586b3190671d68eba19122e388792948f2bd00000000"
 // const claimAddress = "bcrt1qysrj2avcxasl0v07089lduvcqhxych4d4hu600";
